@@ -9,10 +9,58 @@ Catatan yang sudah dilakukan:
 3. menambahkan inertia robot
 4. memastikan integrasi ros dan gazebo - robot sudah terjadi.
 5. sudah dapat bergerak secara sederhana untuk maju menggunakan cmd_vel.
+6. Percobaan dengan teleop
 
 Yang belum dilakukan:
 
-1. Percobaan dengan teleop
-2. integrasikan dengan sensor imu yang publish data ke ros
-3. Odometry & Pose Monitoring dimana akan memonitoring pose dengan ros2
-4. Integrasi dengan rviz (walaupun sudah bisa, namun akan di coba lagi nanti) dimana akan melihat robot dan pose secara visual.
+1. integrasikan dengan sensor imu yang publish data ke ros
+2. Odometry & Pose Monitoring dimana akan memonitoring pose dengan ros2
+3. Integrasi dengan rviz (walaupun sudah bisa, namun akan di coba lagi nanti) dimana akan melihat robot dan pose secara visual.
+
+## Menjalankan kontrol cmd_vel
+
+1. Build workspace:
+
+```bash
+colcon build --packages-select my_robot
+source install/setup.bash
+```
+
+2. Jalankan simulasi Gazebo:
+
+```bash
+ros2 launch my_robot gazebo.launch.py
+```
+
+3. Buka terminal lain, lalu jalankan cmd vel beserta kecepatan yang diinginkan:
+
+```bash
+source install/setup.bash
+ros2 topic pub -r 10 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.01}, angular: {z: 0.0}}"
+```
+
+4. Untuk mengubah kecepatan atau rotasi, nilai pada point 3 dapat diubah linear atau angularnya.
+
+## Menjalankan Teleop Keyboard
+
+1. Build workspace:
+
+```bash
+colcon build --packages-select my_robot
+source install/setup.bash
+```
+
+2. Jalankan simulasi Gazebo:
+
+```bash
+ros2 launch my_robot gazebo.launch.py
+```
+
+3. Buka terminal lain, lalu jalankan teleop:
+
+```bash
+source install/setup.bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r cmd_vel:=/cmd_vel
+```
+
+4. Gunakan tombol pada jendela teleop (misalnya i, j, l, k) untuk menggerakkan robot.
