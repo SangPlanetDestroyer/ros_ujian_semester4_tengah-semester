@@ -65,12 +65,20 @@ def generate_launch_description():
         arguments=["/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist"],
     )
 
+    imu_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        output="screen",
+        arguments=["/imu@sensor_msgs/msg/Imu[gz.msgs.IMU"],
+    )
+
     return LaunchDescription(
         [
             gz_sim,
             robot_state_publisher,
-            spawn_robot,
+            # spawn_robot,
             clock_bridge,
             cmd_vel_bridge,
+            imu_bridge,
         ]
     )

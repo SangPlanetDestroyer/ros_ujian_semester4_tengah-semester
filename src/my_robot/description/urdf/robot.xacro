@@ -2,17 +2,30 @@
 <robot name="my_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- ================= PROPERTIES ================= -->
-  <xacro:property name="x_l" value="0.052"/>
-  <xacro:property name="y_l" value="0.029"/>
+  <xacro:property name="x_l" value="-0.029"/>
+  <xacro:property name="y_l" value="0.052"/>
   <xacro:property name="z_l" value="0.008"/>
 
-  <xacro:property name="x_r" value="-0.052"/>
-  <xacro:property name="y_r" value="0.029"/>
+  <xacro:property name="x_r" value="-0.029"/>
+  <xacro:property name="y_r" value="-0.052"/>
   <xacro:property name="z_r" value="0.008"/>
 
-  <xacro:property name="x_c" value="0.00"/>
-  <xacro:property name="y_c" value="-0.038"/>
+  <xacro:property name="x_c" value="0.038"/>
+  <xacro:property name="y_c" value="0.00"/>
   <xacro:property name="z_c" value="0.00"/>
+
+  <xacro:property name="x_imu" value="0.0"/>
+  <xacro:property name="y_imu" value="0.0"/>
+  <xacro:property name="z_imu" value="0.02"/>
+
+  <xacro:property name="mu_drive" value="1.6"/>
+  <xacro:property name="mu_caster" value="0.0"/>
+  <xacro:property name="wheel_damping" value="0.1"/>
+
+  <xacro:property name="wheel_left_slip1" value="0.00"/>
+  <xacro:property name="wheel_left_slip2" value="0.00"/>
+  <xacro:property name="wheel_right_slip1" value="0.00"/>
+  <xacro:property name="wheel_right_slip2" value="0.00"/>
 
   <!-- ================= BASE ================= -->
   <link name="base_link">
@@ -25,7 +38,7 @@
     </inertial>
 
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 1.5708"/>
       <geometry>
         <mesh filename="package://my_robot/description/meshes/body.dae" scale="1.0 1.0 1.0"/>
       </geometry>
@@ -34,7 +47,7 @@
     <collision>
       <origin xyz="0 0 0.026" rpy="0 0 0"/>
       <geometry>
-        <box size="0.086 0.099 0.05379345"/>
+        <box size="0.099 0.086 0.05379345"/>
       </geometry>
     </collision>
 
@@ -49,19 +62,29 @@
       <inertia ixx="0.0001" iyy="0.0001" izz="0.0001"
                ixy="0" ixz="0" iyz="0"/>
     </inertial>
-
+  
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 1.5708"/>
       <geometry>
         <mesh filename="package://my_robot/description/meshes/roda2.dae" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
 
     <collision>
-      <origin xyz="0 0 0" rpy="0 1.5708 0"/>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
       <geometry>
         <cylinder radius="0.02131869" length="0.017"/>
       </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>${mu_drive}</mu>
+            <mu2>${mu_drive}</mu2>
+            <slip1>${wheel_left_slip1}</slip1>
+            <slip2>${wheel_left_slip2}</slip2>
+          </ode>
+        </friction>
+      </surface>
     </collision>
 
   </link>
@@ -70,7 +93,8 @@
     <parent link="base_link"/>
     <child link="left_wheel"/>
     <origin xyz="${x_l} ${y_l} ${z_l}" rpy="0 0 0"/>
-    <axis xyz="1 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${wheel_damping}" friction="0.0"/>
   </joint>
 
   <!-- ================= RIGHT WHEEL ================= -->
@@ -84,17 +108,27 @@
     </inertial>
 
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 1.5708"/>
       <geometry>
         <mesh filename="package://my_robot/description/meshes/roda1.dae" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
 
     <collision>
-      <origin xyz="0 0 0" rpy="0 1.5708 0"/>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
       <geometry>
         <cylinder radius="0.02131869" length="0.017"/>
       </geometry>
+      <surface>
+        <friction>
+          <ode>
+            <mu>${mu_drive}</mu>
+            <mu2>${mu_drive}</mu2>
+            <slip1>${wheel_right_slip1}</slip1>
+            <slip2>${wheel_right_slip2}</slip2>
+          </ode>
+        </friction>
+      </surface>
     </collision>
 
   </link>
@@ -103,7 +137,8 @@
     <parent link="base_link"/>
     <child link="right_wheel"/>
     <origin xyz="${x_r} ${y_r} ${z_r}" rpy="0 0 0"/>
-    <axis xyz="1 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${wheel_damping}" friction="0.0"/>
   </joint>
 
   <!-- ================= CASTER ================= -->
@@ -131,8 +166,8 @@
       <surface>
         <friction>
           <ode>
-            <mu>0.05</mu>
-            <mu2>0.05</mu2>
+            <mu>${mu_caster}</mu>
+            <mu2>${mu_caster}</mu2>
           </ode>
         </friction>
       </surface>
@@ -145,6 +180,74 @@
     <child link="caster_wheel"/>
     <origin xyz="${x_c} ${y_c} ${z_c}" rpy="0 0 0"/>
   </joint>
+
+  <!-- ================= IMU ================= -->
+  <link name="imu_link">
+
+    <inertial>
+      <mass value="0.01"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.000001" iyy="0.000001" izz="0.000001"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+
+  </link>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="${x_imu} ${y_imu} ${z_imu}" rpy="0 0 0"/>
+  </joint>
+
+  <gazebo reference="imu_link">
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <topic>/imu</topic>
+      <imu>
+        <angular_velocity>
+          <x>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.0002</stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.0002</stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.0002</stddev>
+            </noise>
+          </z>
+        </angular_velocity>
+        <linear_acceleration>
+          <x>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.017</stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.017</stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.017</stddev>
+            </noise>
+          </z>
+        </linear_acceleration>
+      </imu>
+    </sensor>
+  </gazebo>
 
   <gazebo>
     <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">

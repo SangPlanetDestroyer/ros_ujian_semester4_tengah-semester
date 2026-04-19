@@ -13,9 +13,54 @@ Catatan yang sudah dilakukan:
 
 Yang belum dilakukan:
 
-1. integrasikan dengan sensor imu yang publish data ke ros
+1. Kalibrasi parameter noise IMU agar sesuai kebutuhan eksperimen
 2. Odometry & Pose Monitoring dimana akan memonitoring pose dengan ros2
 3. Integrasi dengan rviz (walaupun sudah bisa, namun akan di coba lagi nanti) dimana akan melihat robot dan pose secara visual.
+
+## Integrasi Sensor IMU
+
+Sensor IMU sudah ditambahkan pada model robot melalui file xacro dan datanya dipublish ke ROS 2 melalui ros_gz_bridge.
+
+Topik yang digunakan:
+
+1. Topic simulasi (Gazebo): /imu
+2. Topic ROS 2 hasil bridge: /imu (sensor_msgs/msg/Imu)
+
+Langkah menjalankan simulasi dengan IMU:
+
+1. Build workspace:
+
+```bash
+colcon build --packages-select my_robot
+source install/setup.bash
+```
+
+2. Jalankan simulasi Gazebo:
+
+```bash
+ros2 launch my_robot gazebo.launch.py
+```
+
+3. Buka terminal lain untuk memantau data IMU:
+
+```bash
+source install/setup.bash
+ros2 topic list | grep imu
+ros2 topic echo /imu
+```
+
+4. Opsional, cek frekuensi publish IMU:
+
+```bash
+source install/setup.bash
+ros2 topic hz /imu
+```
+
+Catatan:
+
+1. Update rate IMU saat ini diset 100 Hz di file robot.xacro.
+2. Data IMU mencakup orientation, angular_velocity, dan linear_acceleration.
+3. Noise sensor sudah diaktifkan agar perilaku simulasi lebih realistis.
 
 ## Menjalankan kontrol cmd_vel
 
