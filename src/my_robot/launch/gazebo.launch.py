@@ -13,6 +13,7 @@ def generate_launch_description():
     package_name = "my_robot"
     package_share = Path(get_package_share_directory(package_name))
     xacro_path = package_share / "description" / "urdf" / "robot.xacro"
+    urdf_path = package_share / "description" / "urdf" / "robot.urdf"
     world_path = package_share / "worlds" / "empty.world"
 
     robot_description = Command(["xacro ", str(xacro_path)])
@@ -36,12 +37,13 @@ def generate_launch_description():
     spawn_robot = Node(
         package="ros_gz_sim",
         executable="create",
+        name="spawn_robot",
         output="screen",
         arguments=[
             "-name",
             package_name,
-            "-topic",
-            "robot_description",
+            "-file",
+            str(urdf_path),
             "-x",
             "0.0",
             "-y",
@@ -54,6 +56,7 @@ def generate_launch_description():
     clock_bridge = Node(
         package="ros_gz_bridge",
         executable="parameter_bridge",
+        name="clock_bridge",
         output="screen",
         arguments=["/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"],
     )
@@ -61,6 +64,7 @@ def generate_launch_description():
     cmd_vel_bridge = Node(
         package="ros_gz_bridge",
         executable="parameter_bridge",
+        name="cmd_vel_bridge",
         output="screen",
         arguments=["/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist"],
     )
@@ -68,6 +72,7 @@ def generate_launch_description():
     imu_bridge = Node(
         package="ros_gz_bridge",
         executable="parameter_bridge",
+        name="imu_bridge",
         output="screen",
         arguments=["/imu@sensor_msgs/msg/Imu[gz.msgs.IMU"],
     )
@@ -76,7 +81,7 @@ def generate_launch_description():
         [
             gz_sim,
             robot_state_publisher,
-            # spawn_robot,
+            spawn_robot,
             clock_bridge,
             cmd_vel_bridge,
             imu_bridge,

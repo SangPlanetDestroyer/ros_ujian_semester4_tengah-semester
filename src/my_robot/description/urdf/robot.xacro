@@ -14,9 +14,9 @@
   <xacro:property name="y_c" value="0.00"/>
   <xacro:property name="z_c" value="0.00"/>
 
-  <xacro:property name="x_imu" value="0.0"/>
+  <xacro:property name="x_imu" value="0.033"/>
   <xacro:property name="y_imu" value="0.0"/>
-  <xacro:property name="z_imu" value="0.02"/>
+  <xacro:property name="z_imu" value="0.024"/>
 
   <xacro:property name="mu_drive" value="1.6"/>
   <xacro:property name="mu_caster" value="0.0"/>
