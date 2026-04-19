@@ -10,8 +10,9 @@ Catatan yang sudah dilakukan:
 4. memastikan integrasi ros dan gazebo - robot sudah terjadi.
 5. sudah dapat bergerak secara sederhana untuk maju menggunakan cmd_vel.
 6. Percobaan dengan teleop
+7. Penambahan imu ke dalam robot dan dapat di echo topic nya untuk melihat hasil.
 
-Yang belum dilakukan:
+Yang belum dilakukan (TODO):
 
 1. Kalibrasi parameter noise IMU agar sesuai kebutuhan eksperimen
 2. Odometry & Pose Monitoring dimana akan memonitoring pose dengan ros2

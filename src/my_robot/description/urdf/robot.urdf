@@ -45,8 +45,8 @@
       <surface>
         <friction>
           <ode>
-            <mu>1.6</mu>
-            <mu2>1.6</mu2>
+            <mu>0.8</mu>
+            <mu2>0.8</mu2>
             <slip1>0.0</slip1>
             <slip2>0.0</slip2>
           </ode>
@@ -59,7 +59,7 @@
     <child link="left_wheel"/>
     <origin rpy="0 0 0" xyz="-0.029 0.052 0.008"/>
     <axis xyz="0 1 0"/>
-    <dynamics damping="0.1" friction="0.0"/>
+    <dynamics damping="0.5" friction="0.0"/>
   </joint>
   <!-- ================= RIGHT WHEEL ================= -->
   <link name="right_wheel">
@@ -82,8 +82,8 @@
       <surface>
         <friction>
           <ode>
-            <mu>1.6</mu>
-            <mu2>1.6</mu2>
+            <mu>0.8</mu>
+            <mu2>0.8</mu2>
             <slip1>0.0</slip1>
             <slip2>0.0</slip2>
           </ode>
@@ -96,7 +96,7 @@
     <child link="right_wheel"/>
     <origin rpy="0 0 0" xyz="-0.029 -0.052 0.008"/>
     <axis xyz="0 1 0"/>
-    <dynamics damping="0.1" friction="0.0"/>
+    <dynamics damping="0.5" friction="0.0"/>
   </joint>
   <!-- ================= CASTER ================= -->
   <link name="caster_wheel">
@@ -199,11 +199,17 @@
       <right_joint>right_wheel_joint</right_joint>
       <wheel_separation>0.104</wheel_separation>
       <wheel_radius>0.02131869</wheel_radius>
+      <max_linear_velocity>1.0</max_linear_velocity>
+      <max_angular_velocity>2.0</max_angular_velocity>
+      <linear_acceleration_limit>1.0</linear_acceleration_limit>
+      <angular_acceleration_limit>2.0</angular_acceleration_limit>
       <topic>/cmd_vel</topic>
       <odom_topic>/odom</odom_topic>
       <tf_topic>/tf</tf_topic>
       <frame_id>odom</frame_id>
       <child_frame_id>base_link</child_frame_id>
+      <publish_wheel_tf>false</publish_wheel_tf>
+      <publish_odom_tf>true</publish_odom_tf>
     </plugin>
   </gazebo>
 </robot>

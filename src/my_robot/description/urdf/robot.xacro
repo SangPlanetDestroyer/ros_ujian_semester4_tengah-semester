@@ -18,9 +18,9 @@
   <xacro:property name="y_imu" value="0.0"/>
   <xacro:property name="z_imu" value="0.024"/>
 
-  <xacro:property name="mu_drive" value="1.6"/>
+  <xacro:property name="mu_drive" value="0.8"/>
   <xacro:property name="mu_caster" value="0.0"/>
-  <xacro:property name="wheel_damping" value="0.1"/>
+  <xacro:property name="wheel_damping" value="0.5"/>
 
   <xacro:property name="wheel_left_slip1" value="0.00"/>
   <xacro:property name="wheel_left_slip2" value="0.00"/>
@@ -255,11 +255,17 @@
       <right_joint>right_wheel_joint</right_joint>
       <wheel_separation>0.104</wheel_separation>
       <wheel_radius>0.02131869</wheel_radius>
+      <max_linear_velocity>1.0</max_linear_velocity>
+      <max_angular_velocity>2.0</max_angular_velocity>
+      <linear_acceleration_limit>1.0</linear_acceleration_limit>
+      <angular_acceleration_limit>2.0</angular_acceleration_limit>
       <topic>/cmd_vel</topic>
       <odom_topic>/odom</odom_topic>
       <tf_topic>/tf</tf_topic>
       <frame_id>odom</frame_id>
       <child_frame_id>base_link</child_frame_id>
+      <publish_wheel_tf>false</publish_wheel_tf>
+      <publish_odom_tf>true</publish_odom_tf>
     </plugin>
   </gazebo>
 </robot>
