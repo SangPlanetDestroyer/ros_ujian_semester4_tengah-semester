@@ -8,8 +8,7 @@
   <link name="base_link">
     <inertial>
       <mass value="2.0"/>
-      <!-- LOWERED CoM -->
-      <origin rpy="0 0 0" xyz="0 0 -0.01"/>
+      <origin rpy="0 0 0" xyz="-0.015 0 0"/>
       <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.015" iyz="0" izz="0.02"/>
     </inertial>
     <visual>
@@ -106,9 +105,9 @@
   <!-- ================= CASTER ================= -->
   <link name="caster_wheel">
     <inertial>
-      <mass value="0.1"/>
+      <mass value="0.02"/>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+      <inertia ixx="0.000002" ixy="0" ixz="0" iyy="0.000002" iyz="0" izz="0.000002"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -117,15 +116,17 @@
       </geometry>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 -0.008"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.007"/>
       <geometry>
         <sphere radius="0.006"/>
       </geometry>
       <surface>
         <friction>
           <ode>
-            <mu>0.1</mu>
-            <mu2>0.1</mu2>
+            <mu>0.01</mu>
+            <mu2>0.01</mu2>
+            <slip1>0.15</slip1>
+            <slip2>0.15</slip2>
           </ode>
         </friction>
       </surface>
