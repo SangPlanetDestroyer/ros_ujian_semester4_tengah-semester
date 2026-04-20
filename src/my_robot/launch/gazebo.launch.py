@@ -77,6 +77,22 @@ def generate_launch_description():
         arguments=["/imu@sensor_msgs/msg/Imu[gz.msgs.IMU"],
     )
 
+    odom_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        name="odom_bridge",
+        output="screen",
+        arguments=["/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry"],
+    )
+
+    tf_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        name="tf_bridge",
+        output="screen",
+        arguments=["/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V"],
+    )
+
     return LaunchDescription(
         [
             gz_sim,
@@ -85,5 +101,7 @@ def generate_launch_description():
             clock_bridge,
             cmd_vel_bridge,
             imu_bridge,
+            odom_bridge,
+            tf_bridge,
         ]
     )
